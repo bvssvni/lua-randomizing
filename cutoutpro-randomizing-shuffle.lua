@@ -43,10 +43,27 @@ end
 
 -- Shuffle items in a list in random order.
 -- This alters the original list.
+-- There are n! possible sequences using this shuffle.
+-- This is known as Fisher-Yates shuffle or Knuth shuffle.
 function cutoutpro.randomizing.shuffle(items)
   local n = #items
   for i = n, 1, -1 do
     local j = math.random(n)
+    items[i], items[j] = items[j], items[i]
+    n = n - 1
+  end
+end
+
+-- Shuffle items in a list but leave not items at the same position.
+-- In group-theory, this equals an generator g^n = e, where e is the original list.
+-- It means when shuffling a cycle of a list of items 1 to 3, each item will
+-- visit all positions such that items[items[items[i]]] = items[i].
+-- There are (n-1)! possible sequences to generate using this method.
+-- This is known as Sattolo's algorithm.
+function cutoutpro.randomizing.shuffleCycle(items)
+  local n = #items
+  for i = n, 1, -1 do
+    local j = math.random(n-1)
     items[i], items[j] = items[j], items[i]
     n = n - 1
   end
